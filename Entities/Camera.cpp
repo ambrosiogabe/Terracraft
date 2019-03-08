@@ -37,7 +37,8 @@ void Camera::calculatePosition() {
 	float newX = player->getPos().x - (dx * sin(Math::toRadians(player->getRy())));
 	float newZ = player->getPos().z - (dx * cos(Math::toRadians(player->getRy())));
 	this->position[0] = newX;
-	if (newY > 0.0) this->position[1] = newY;
+	//if (newY > 0.0) this->position[1] = newY;
+	this->position[1] = newY;
 	this->position[2] = newZ;
 }
 

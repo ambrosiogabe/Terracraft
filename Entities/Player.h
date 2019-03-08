@@ -1,6 +1,5 @@
 #pragma once
 #include "glm/vec2.hpp"
-#include "../World/Terrain.h"
 #include "Entity.h"
 
 class Player : public Entity
@@ -8,7 +7,7 @@ class Player : public Entity
 public:
 	Player(TexturedModel* model, glm::vec3 pos, float rx, float ry, float rz, float scale);
 	~Player();
-	void move(float delta, Terrain* terrain);
+	void move(float delta);
 
 	void setEyeLevel(float level);
 	float getEyeLevel();

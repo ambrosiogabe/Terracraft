@@ -6,8 +6,8 @@
 int main()
 {
 	std::vector<char*>* files = new std::vector<char*>();
-	files->push_back("res/textures/block/grass_block_side.png");
-	files->push_back("res/textures/block/grass_block_top.png");
+	files->push_back("res/textures/block/grass_path_side.png");
+	files->push_back("res/textures/block/grass_path_top.png");
 	files->push_back("res/textures/block/dirt.png");
 	files->push_back("res/textures/block/stone.png");
 	files->push_back("res/textures/block/sand.png");
@@ -17,10 +17,10 @@ int main()
 	files->push_back("res/textures/block/bedrock.png");
 	files->push_back("res/textures/block/stone_bricks.png");
 	files->push_back("res/textures/block/red_stained_glass.png");
-	FileHandler::createTextureAtlas(*files);
-	
+	std::vector<BlockTexture*>* blockTextures = FileHandler::createTextureAtlas(*files);
+
 	GLFWwindow* display = DisplayManager::createDisplay();
-	DisplayManager::updateDisplay(display);
+	DisplayManager::updateDisplay(display, blockTextures);
 	DisplayManager::closeDisplay(display);
 	
 

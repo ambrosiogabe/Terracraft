@@ -7,7 +7,7 @@
 Player::~Player() {}
 Player::Player(TexturedModel* model, glm::vec3 pos, float rx, float ry, float rz, float scale) : Entity(model, pos, rx, ry, rz, scale) {}
 
-void Player::move(float delta, Terrain* terrain) {
+void Player::move(float delta) {
 	checkInputs();
 	float distance = delta * currentSpeed[0];
 	float distance2 = delta * currentSpeed[1];
@@ -17,7 +17,7 @@ void Player::move(float delta, Terrain* terrain) {
 	Entity::increasePosition(dx, 0, dz);
 
 	//speedDy += GRAVITY * delta;
-	float terrainHeight = terrain->getHeightOfTerrain(Entity::getPos().x, Entity::getPos().z);
+
 	Entity::increasePosition(0, speedDy * delta, 0);
 	/*if (Entity::getPos().y < terrainHeight) {
 		speedDy = 0;
