@@ -147,6 +147,7 @@
     <ClCompile Include="Utils\InputHandler.cpp" />
     <ClCompile Include="Utils\Math.cpp" />
     <ClCompile Include="Utils\Time.cpp" />
+    <ClCompile Include="World\World.cpp" />
     <ClCompile Include="World\Chunk.cpp" />
     <ClCompile Include="World\Terrain.cpp" />
   </ItemGroup>
@@ -183,6 +184,7 @@
     <ClInclude Include="Utils\InputHandler.h" />
     <ClInclude Include="Utils\Math.h" />
     <ClInclude Include="Utils\Time.h" />
+    <ClInclude Include="World\World.h" />
     <ClInclude Include="World\Chunk.h" />
     <ClInclude Include="World\Terrain.h" />
   </ItemGroup>

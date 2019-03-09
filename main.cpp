@@ -3,11 +3,12 @@
 #include "Utils/FileHandler.h"
 #include <iostream>
 
+
 int main()
 {
 	std::vector<char*>* files = new std::vector<char*>();
-	files->push_back("res/textures/block/grass_path_side.png");
-	files->push_back("res/textures/block/grass_path_top.png");
+	files->push_back("res/textures/block/grass_block_side.png");
+	files->push_back("res/textures/block/grass_block_top.png");
 	files->push_back("res/textures/block/dirt.png");
 	files->push_back("res/textures/block/stone.png");
 	files->push_back("res/textures/block/sand.png");

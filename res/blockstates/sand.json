@@ -1,7 +1,6 @@
 {
+    "__comment": "Fair warning, this format is highly likely to change even more in the future!",
     "variants": {
-        "": [
-            { "model": "block/sand" }
-        ]
+        "normal": { "model": "sand" }
     }
 }

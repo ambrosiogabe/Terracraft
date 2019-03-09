@@ -4,14 +4,11 @@
 #include "../Engine/Loader.h"
 #include "../Models/TexturedModel.h"
 #include "../Utils/FileHandler.h"
+#include <iostream>
+#include <string>
 
 #define CHUNK_HEIGHT 256
 #define CHUNK_WIDTH 16
-
-struct Block {
-	int id;
-	int tex_id_top, tex_id_bottom, tex_id_left, tex_id_right, tex_id_forward, tex_id_back;
-};
 
 class Chunk {
 
@@ -19,12 +16,24 @@ public:
 	Chunk(int x, int z);
 	~Chunk();
 
-	TexturedModel* getChunkModel(Loader* loader, std::vector<BlockTexture*>* blockTextures, ModelTexture* modelTexture);
+	void generateModel(std::vector<TexturePointer*>* blockTextures);
+	TexturedModel* getModel(Loader* loader, ModelTexture* modelTexture);
+	int chunkX = 0, chunkZ = 0;
+	std::string name = *(new std::string());
+	int status = 0;
 
 private:
 	Block* chunkData[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_WIDTH];
+	Block* blockData;
+	int chunkWorldX = 0, chunkWorldZ = 0;
+
+	std::vector<float> vertices;
+	std::vector<int> indices;
+	std::vector<float> textureCoords;
+	std::vector<float> normals;
 	
 	void addVertex(glm::vec3* vertex, std::vector<float>* vertices);
+
 	void addFace(
 		std::vector<float>* vertices,
 		std::vector<int>* indices,
@@ -33,7 +42,7 @@ private:
 
 		std::vector<glm::vec3*>* verts,
 		int face,
-		std::vector<BlockTexture*>* blockTextures,
+		std::vector<TexturePointer*>* blockTextures,
 		int x,
 		int y,
 		int z

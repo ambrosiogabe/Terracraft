@@ -347,11 +347,11 @@ std::vector<BlockTexture*>* FileHandler::createTextureAtlas(std::vector<char*> f
 		curBlockTexture->id = i;
 		blockTextures->push_back(curBlockTexture);
 
-		std::cout << "Id: " << curBlockTexture->id << std::endl;
-		std::cout << "X1: " << curBlockTexture->x1 << std::endl;
-		std::cout << "X2: " << curBlockTexture->x2 << std::endl;
-		std::cout << "Y1: " << curBlockTexture->y1 << std::endl;
-		std::cout << "Y2: " << curBlockTexture->y2 << std::endl << std::endl;
+		//std::cout << "Id: " << curBlockTexture->id << std::endl;
+		//std::cout << "X1: " << curBlockTexture->x1 << std::endl;
+		//std::cout << "X2: " << curBlockTexture->x2 << std::endl;
+		//std::cout << "Y1: " << curBlockTexture->y1 << std::endl;
+		//std::cout << "Y2: " << curBlockTexture->y2 << std::endl << std::endl;
 	}
 
 	return blockTextures;

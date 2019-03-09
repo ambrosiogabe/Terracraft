@@ -14,6 +14,20 @@ struct BlockTexture {
 	float y2;
 };
 
+struct TexturePointer {
+	int blockId;
+	BlockTexture* tex_top;
+	BlockTexture* tex_bottom;
+	BlockTexture* tex_left;
+	BlockTexture* tex_right;
+	BlockTexture* tex_forward;
+	BlockTexture* tex_back;
+};
+
+struct Block {
+	int id;
+};
+
 class FileHandler
 {
 public:

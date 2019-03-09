@@ -1,7 +1,7 @@
 {
     "variants": {
-        "": [
-            { "model": "block/red_sand" }
+        "normal": [
+            { "model": "red_sand" }
         ]
     }
 }

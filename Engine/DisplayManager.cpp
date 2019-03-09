@@ -13,11 +13,14 @@
 #include "../Utils/InputHandler.h"
 //#include "../Utils/FileHandler.h"
 #include <stdlib.h>
+#include <map>
+#include <string>
 #include "../Entities/Camera.h"
 #include "../Entities/Player.h"
 #include "../Textures/TerrainTexture.h"
 #include "../Textures/TerrainTexturePack.h"
 #include "../World/Chunk.h"
+#include "../World/World.h"
 #include "MasterRenderer.h"
 #include "DisplayManager.h"
 
@@ -75,15 +78,14 @@ void DisplayManager::updateDisplay(GLFWwindow* display, std::vector<BlockTexture
 	Loader* loader = new Loader();
 
 	ModelTexture* terrainTextureAtlas = new ModelTexture(loader->loadTexture("res/texture_atlas.png"));
-	Chunk* chunk = new Chunk(0, 0);
-	TexturedModel* chunkModel = chunk->getChunkModel(loader, blockTextures, terrainTextureAtlas);
-	Entity* chunkEntity = new Entity(chunkModel, *(new glm::vec3(0, 0, 0)), 0, 0, 0, 1);
 
 	RawModel* rawPlayerModel = FileHandler::loadOBJ("res/bunny.obj", loader);
 	ModelTexture* playerTexture = new ModelTexture(loader->loadTexture("res/stallTexture.png"));
 	TexturedModel* texturedPlayer = new TexturedModel(rawPlayerModel, playerTexture);
-	Player* player = new Player(texturedPlayer, *(new glm::vec3(0, 0, -30)), 0, 0, 0, 0.2);
-	player->setEyeLevel(3.5);
+	Player* player = new Player(texturedPlayer, *(new glm::vec3(0, 46, -30)), 0, 0, 0, 0.2);
+	player->setEyeLevel(0.5);
+
+	World* world = new World(player, blockTextures, loader, terrainTextureAtlas);
 
 	std::vector<GuiTexture*> guis = *(new std::vector<GuiTexture*>());
 	GuiTexture* gui = new GuiTexture(loader->loadTexture("res/socuwan.png"), *(new glm::vec2(-0.70f, 0.95f)), *(new glm::vec2(0.17f, 0.23f)));
@@ -97,6 +99,7 @@ void DisplayManager::updateDisplay(GLFWwindow* display, std::vector<BlockTexture
 	lights->push_back(light);
 	MasterRenderer* renderer = new MasterRenderer(WIDTH, HEIGHT);
 
+	std::map<std::string, Entity*>::iterator it;
 	while (!glfwWindowShouldClose(display)) {
 		double current = Time::getCurrentTime();
 		double elapsed = current - previous;
@@ -109,13 +112,17 @@ void DisplayManager::updateDisplay(GLFWwindow* display, std::vector<BlockTexture
 			// update();
 			camera->move();
 			player->move(lag / MS_FACTOR_PER_UPDATE);
+			world->update(lag / MS_FACTOR_PER_UPDATE);
 			lag -= MS_PER_UPDATE;
 		}
 
 		// render
 		// ------
 		renderer->processEntity(player);
-		renderer->processEntity(chunkEntity);
+		for (it = world->chunkEntities->begin(); it != world->chunkEntities->end(); it++) {
+			Entity* chunk = it->second;
+			renderer->processEntity(chunk);
+		}
 
 		renderer->render(*lights, camera);
 		guiRenderer->render(guis);
@@ -129,6 +136,7 @@ void DisplayManager::updateDisplay(GLFWwindow* display, std::vector<BlockTexture
 	guiRenderer->cleanUp();
 	renderer->cleanUp();
 	loader->cleanUp();
+	world->cleanUp();
 }
 
 void DisplayManager::closeDisplay(GLFWwindow* display) {
@@ -151,5 +159,4 @@ void cursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
 
 void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 	InputHandler::setMouseScroll(yoffset);
-	std::cout << yoffset << std::endl;
 }

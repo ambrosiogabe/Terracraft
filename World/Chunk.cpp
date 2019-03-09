@@ -3,36 +3,21 @@
 #include "Chunk.h"
 
 Chunk::~Chunk() {}
-Chunk::Chunk(int x, int z) {
+Chunk::Chunk(int chunkX, int chunkZ) {
+	this->chunkX = chunkX;
+	this->chunkZ = chunkZ;
+	this->chunkWorldX = chunkX * 16;
+	this->chunkWorldZ = chunkZ * 16;
+	this->name = std::string("chunk_") + std::to_string(chunkX) + std::string("_") + std::to_string(chunkZ);
+
 	Block* empty = new Block();
 	empty->id = 0;
 	Block* dirt = new Block();
 	dirt->id = 2;
-
-	dirt->tex_id_back = 2;
-	dirt->tex_id_bottom = 2;
-	dirt->tex_id_forward = 2;
-	dirt->tex_id_top = 2;
-	dirt->tex_id_right = 2;
-	dirt->tex_id_left = 2;
 	Block* grass = new Block();
 	grass->id = 1;
-
-	grass->tex_id_back = 0;
-	grass->tex_id_forward = 0;
-	grass->tex_id_left = 0;
-	grass->tex_id_right = 0;
-	grass->tex_id_bottom = 2;
-	grass->tex_id_top = 1;
 	Block* wood = new Block();
 	wood->id = 2;
-
-	wood->tex_id_back = 5;
-	wood->tex_id_bottom = 5;
-	wood->tex_id_forward = 5;
-	wood->tex_id_left = 5;
-	wood->tex_id_right = 5;
-	wood->tex_id_top = 5;
 
 	for (int x = 0; x < CHUNK_WIDTH; x++) {
 		for (int z = 0; z < CHUNK_WIDTH; z++) {
@@ -47,14 +32,10 @@ Chunk::Chunk(int x, int z) {
 			}
 		}
 	}
+	status = 0;
 }
 
-TexturedModel* Chunk::getChunkModel(Loader* loader, std::vector<BlockTexture*>* blockTextures, ModelTexture* modelTexture) {
-	std::vector<float> vertices;
-	std::vector<int> indices;
-	std::vector<float> textureCoords;
-	std::vector<float> normals;
-
+void Chunk::generateModel(std::vector<TexturePointer*>* blockTextures) {
 	int triangleCounter = 0;
 	for (int x = 0; x < CHUNK_WIDTH; x++) {
 		for (int y = 0; y < CHUNK_HEIGHT; y++) {
@@ -62,14 +43,14 @@ TexturedModel* Chunk::getChunkModel(Loader* loader, std::vector<BlockTexture*>* 
 				if (chunkData[x][y][z]->id == 0) continue;
 
 				std::vector<glm::vec3*> verts;
-				verts.push_back(new glm::vec3(x - 0.5, y - 0.5, z + 0.5));
-				verts.push_back(new glm::vec3(x + 0.5, y - 0.5, z + 0.5));
-				verts.push_back(new glm::vec3(x + 0.5, y - 0.5, z - 0.5));
-				verts.push_back(new glm::vec3(x - 0.5, y - 0.5, z - 0.5));
-				verts.push_back(new glm::vec3(x - 0.5, y + 0.5, z + 0.5));
-				verts.push_back(new glm::vec3(x + 0.5, y + 0.5, z + 0.5));
-				verts.push_back(new glm::vec3(x + 0.5, y + 0.5, z - 0.5));
-				verts.push_back(new glm::vec3(x - 0.5, y + 0.5, z - 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x - 0.5, y - 0.5, chunkWorldZ + z + 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x + 0.5, y - 0.5, chunkWorldZ + z + 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x + 0.5, y - 0.5, chunkWorldZ + z - 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x - 0.5, y - 0.5, chunkWorldZ + z - 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x - 0.5, y + 0.5, chunkWorldZ + z + 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x + 0.5, y + 0.5, chunkWorldZ + z + 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x + 0.5, y + 0.5, chunkWorldZ + z - 0.5));
+				verts.push_back(new glm::vec3(chunkWorldX + x - 0.5, y + 0.5, chunkWorldZ + z - 0.5));
 
 				// 0 - Right 
 				// 1 - Left
@@ -110,12 +91,14 @@ TexturedModel* Chunk::getChunkModel(Loader* loader, std::vector<BlockTexture*>* 
 			}
 		}
 	}
+}
 
+TexturedModel* Chunk::getModel(Loader* loader, ModelTexture* modelTexture) {
 	RawModel* rawModel = loader->loadToVao(&vertices[0], vertices.size(), &indices[0], indices.size(), &textureCoords[0], textureCoords.size(), &normals[0], normals.size());
 	return new TexturedModel(rawModel, modelTexture);
 }
 
-void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std::vector<float>* textureCoords, std::vector<float>* normals, std::vector<glm::vec3*>* verts, int face, std::vector<BlockTexture*>* blockTextures, int x, int y, int z) {
+void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std::vector<float>* textureCoords, std::vector<float>* normals, std::vector<glm::vec3*>* verts, int face, std::vector<TexturePointer*>* blockTextures, int x, int y, int z) {
 	int startTriangle = vertices->size() / 3;
 	BlockTexture* texture = nullptr;
 
@@ -124,7 +107,7 @@ void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std
 		addVertex(verts->at(5), vertices);
 		addVertex(verts->at(1), vertices);
 		addVertex(verts->at(0), vertices);
-		texture = blockTextures->at(chunkData[x][y][z]->tex_id_right);
+		texture = blockTextures->at(chunkData[x][y][z]->id)->tex_right;
 
 		for (int i = 0; i < 4; i++) {
 			normals->push_back(0);
@@ -136,7 +119,7 @@ void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std
 		addVertex(verts->at(7), vertices);
 		addVertex(verts->at(3), vertices);
 		addVertex(verts->at(2), vertices);
-		texture = blockTextures->at(chunkData[x][y][z]->tex_id_left);
+		texture = blockTextures->at(chunkData[x][y][z]->id)->tex_left;
 
 		for (int i = 0; i < 4; i++) {
 			normals->push_back(0);
@@ -148,7 +131,7 @@ void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std
 		addVertex(verts->at(6), vertices);
 		addVertex(verts->at(5), vertices);
 		addVertex(verts->at(4), vertices);
-		texture = blockTextures->at(chunkData[x][y][z]->tex_id_top);
+		texture = blockTextures->at(chunkData[x][y][z]->id)->tex_top;
 
 		for (int i = 0; i < 4; i++) {
 			normals->push_back(0);
@@ -160,7 +143,7 @@ void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std
 		addVertex(verts->at(1), vertices);
 		addVertex(verts->at(2), vertices);
 		addVertex(verts->at(3), vertices);
-		texture = blockTextures->at(chunkData[x][y][z]->tex_id_bottom);
+		texture = blockTextures->at(chunkData[x][y][z]->id)->tex_bottom;
 
 		for (int i = 0; i < 4; i++) {
 			normals->push_back(0);
@@ -172,7 +155,7 @@ void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std
 		addVertex(verts->at(6), vertices);
 		addVertex(verts->at(2), vertices);
 		addVertex(verts->at(1), vertices);
-		texture = blockTextures->at(chunkData[x][y][z]->tex_id_forward);
+		texture = blockTextures->at(chunkData[x][y][z]->id)->tex_forward;
 
 		for (int i = 0; i < 4; i++) {
 			normals->push_back(1);
@@ -184,7 +167,7 @@ void Chunk::addFace(std::vector<float>* vertices, std::vector<int>* indices, std
 		addVertex(verts->at(4), vertices);
 		addVertex(verts->at(0), vertices);
 		addVertex(verts->at(3), vertices);
-		texture = blockTextures->at(chunkData[x][y][z]->tex_id_back);
+		texture = blockTextures->at(chunkData[x][y][z]->id)->tex_back;
 
 		for (int i = 0; i < 4; i++) {
 			normals->push_back(-1);
