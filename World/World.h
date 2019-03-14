@@ -50,8 +50,8 @@ private:
 	// 1 - Keep
 	// 2 - Done
 
-	int chunkRange = 6;
-	int threshold = 2;
+	int chunkRange = 12;
+	int threshold = 1;
 	int centerChunkX, centerChunkZ;
 };
 

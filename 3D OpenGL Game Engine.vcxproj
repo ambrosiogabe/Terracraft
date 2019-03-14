@@ -171,6 +171,7 @@
     <ClInclude Include="External_Resources\stb_image.h" />
     <ClInclude Include="Guis\GuiRenderer.h" />
     <ClInclude Include="Guis\GuiTexture.h" />
+    <ClInclude Include="Utils\MArray.h" />
     <ClInclude Include="Models\RawModel.h" />
     <ClInclude Include="Models\TexturedModel.h" />
     <ClInclude Include="Shaders\GuiShader.h" />

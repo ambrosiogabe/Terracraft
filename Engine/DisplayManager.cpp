@@ -33,7 +33,7 @@ void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
 // This value is assigned in the initialization function
 // it controls how long we wait between renders.
 static const double MS_PER_UPDATE = 0.03; // 30 FPS
-static const double MS_FACTOR_PER_UPDATE = 200000;
+static const double MS_FACTOR_PER_UPDATE = 500000;
 
 DisplayManager::DisplayManager() {}
 

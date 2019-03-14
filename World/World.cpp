@@ -30,7 +30,7 @@ void World::update(float delta) {
 			t1 = std::thread(&World::generateChunks, this, player->getPos().x, player->getPos().z);
 			//generateChunks(player->getPos().x, player->getPos().z);
 		} else if (!killThread) {
-			killThread = true;
+			//killThread = true;
 		}
 	}
 
@@ -57,7 +57,7 @@ void World::generateChunks(int x, int z) {
 		}
 	}
 
-	removeChunks();
+	//removeChunks();
 
 	std::vector<std::thread*> helperThreads;
 	for (int i = 0; i < chunkRange; i++) {

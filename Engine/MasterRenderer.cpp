@@ -71,7 +71,7 @@ void MasterRenderer::createProjectionMatrix() {
 	float x_scale = y_scale / aspectRatio;
 	float frustum_length = FAR_PLANE - NEAR_PLANE;
 
-	projectionMatrix = *(new glm::mat4());
+	projectionMatrix = glm::mat4();
 	projectionMatrix[0][0] = x_scale;
 	projectionMatrix[1][1] = y_scale;
 	projectionMatrix[2][2] = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
