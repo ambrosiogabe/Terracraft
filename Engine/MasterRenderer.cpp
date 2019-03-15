@@ -14,7 +14,12 @@ float toRadians(float num) {
 	return (num * PI) / 180.0;
 }
 
-MasterRenderer::~MasterRenderer() {}
+MasterRenderer::~MasterRenderer() {
+	delete staticShader;
+	delete terrainShader;
+	delete entityRenderer;
+	delete terrainRenderer;
+}
 MasterRenderer::MasterRenderer(int width, int height) {
 	MasterRenderer::enableCulling();
 	glEnable(GL_DEPTH_TEST);
@@ -34,34 +39,36 @@ void MasterRenderer::render(std::vector<Light*> lights, Camera* camera) {
 	staticShader->loadSkyColor(RED, GREEN, BLUE);
 	staticShader->loadLights(lights);
 	staticShader->loadViewMatrix(camera);
-	entityRenderer->render(entities);
+	entityRenderer->render(&entities);
 	staticShader->stop();
 
 	terrainShader->start();
 	terrainShader->loadSkyColor(RED, GREEN, BLUE);
 	terrainShader->loadLights(lights);
 	terrainShader->loadViewMatrix(camera);
-	terrainRenderer->render(terrains);
+	terrainRenderer->render(&terrains);
 	terrainShader->stop();
 
-	terrains->clear();
-	entities->clear();
+	terrains.clear();
+	terrains.shrink_to_fit();
+	std::map<TexturedModel*, std::vector<Entity>> newEntities;
+	entities.swap(newEntities);
 }
 
 void MasterRenderer::processTerrain(Terrain* terrain) {
-	this->terrains->push_back(terrain);
+	this->terrains.push_back(*terrain);
 }
 
 void MasterRenderer::processEntity(Entity* entity) {
 	TexturedModel* model = entity->getModel();
-	bool inMap = entities->count(model);
+	bool inMap = entities.count(model);
 	if (inMap) {
-		std::vector<Entity*>* batch = entities->at(model);
-		batch->push_back(entity);
+		std::vector<Entity> batch = entities.at(model);
+		batch.push_back(*entity);
 	} else {
-		std::vector<Entity*>* batch = new std::vector<Entity*>();
-		batch->push_back(entity);
-		entities->insert( std::pair<TexturedModel*, std::vector<Entity*>*>(model, batch) );
+		std::vector<Entity> batch;
+		batch.push_back(*entity);
+		entities.insert( std::pair<TexturedModel*, std::vector<Entity>>(model, batch) );
 	}
 }
 

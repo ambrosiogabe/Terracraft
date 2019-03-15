@@ -61,7 +61,7 @@ void TerrainShader::loadShineVariables(float damper, float reflectivity) {
 }
 
 void TerrainShader::loadSkyColor(float r, float g, float b) {
-	ShaderProgram::loadVector(location_skyColor, *(new glm::vec3(r, g, b)));
+	ShaderProgram::loadVector(location_skyColor, glm::vec3(r, g, b));
 }
 
 void TerrainShader::loadTransformationMatrix(glm::mat4 matrix) {
@@ -73,8 +73,8 @@ void TerrainShader::loadProjectionMatrix(glm::mat4 projection) {
 }
 
 void TerrainShader::loadViewMatrix(Camera* camera) {
-	glm::mat4* viewMatrix = Math::createViewMatrix(camera);
-	ShaderProgram::LoadMatrix(location_viewMatrix, *viewMatrix);
+	glm::mat4 viewMatrix = Math::createViewMatrix(camera);
+	ShaderProgram::LoadMatrix(location_viewMatrix, viewMatrix);
 }
 
 void TerrainShader::loadLights(std::vector<Light*> lights) {
@@ -86,9 +86,9 @@ void TerrainShader::loadLights(std::vector<Light*> lights) {
 			ShaderProgram::loadVector(location_attenuation[i], light->getAttenuation());
 		}
 		else {
-			ShaderProgram::loadVector(location_lightPosition[i], *(new glm::vec3(0.0, 0.0, 0.0)));
-			ShaderProgram::loadVector(location_lightColor[i], *(new glm::vec3(0.0, 0.0, 0.0)));
-			ShaderProgram::loadVector(location_attenuation[i], *(new glm::vec3(1.0, 0.0, 0.0)));
+			ShaderProgram::loadVector(location_lightPosition[i], glm::vec3(0.0, 0.0, 0.0));
+			ShaderProgram::loadVector(location_lightColor[i], glm::vec3(0.0, 0.0, 0.0));
+			ShaderProgram::loadVector(location_attenuation[i], glm::vec3(1.0, 0.0, 0.0));
 		}
 	}
 }

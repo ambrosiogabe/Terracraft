@@ -17,30 +17,30 @@ float Math::barryCentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 pos
 	return l1 * p1.y + l2 * p2.y + l3 * p3.y;
 }
 
-glm::mat4* Math::createTransformationMatrix(glm::vec2 translation, glm::vec2 scale) {
+glm::mat4 Math::createTransformationMatrix(glm::vec2 translation, glm::vec2 scale) {
 	glm::mat4 matrix = glm::mat4(1.0f);
 	matrix = glm::translate(matrix, glm::vec3(translation.x, translation.y, 0.f));
 	matrix = glm::scale(matrix, glm::vec3(scale.x, scale.y, 1.f));
-	return &matrix;
-}
-
-glm::mat4* Math::createTransformationMatrix(glm::vec3 translation, float rx, float ry, float rz, float scale) {
-	glm::mat4* matrix = new glm::mat4(1.0f);
-	*matrix = glm::translate(*matrix, translation);
-	*matrix = glm::rotate(*matrix, glm::radians(rx), *(new glm::vec3(1.0f, 0.0f, 0.0f)) );
-	*matrix = glm::rotate(*matrix, glm::radians(ry), *(new glm::vec3(0.0f, 1.0f, 0.0f)) );
-	*matrix = glm::rotate(*matrix, glm::radians(rz), *(new glm::vec3(0.0f, 0.0f, 1.0f)) );
-	*matrix = glm::scale(*matrix, *(new glm::vec3(scale, scale, scale)) );
 	return matrix;
 }
 
-glm::mat4* Math::createViewMatrix(Camera* camera) {
-	glm::mat4* matrix = new glm::mat4(1.0f);
-	*matrix = glm::rotate(*matrix, glm::radians(camera->getPitch()), *(new glm::vec3(1.0f, 0.0f, 0.0f)));
-	*matrix = glm::rotate(*matrix, glm::radians(camera->getYaw()), *(new glm::vec3(0.0f, 1.0f, 0.0f)));
+glm::mat4 Math::createTransformationMatrix(glm::vec3 translation, float rx, float ry, float rz, float scale) {
+	glm::mat4 matrix = glm::mat4(1.0f);
+	matrix = glm::translate(matrix, translation);
+	matrix = glm::rotate(matrix, glm::radians(rx), glm::vec3(1.0f, 0.0f, 0.0f) );
+	matrix = glm::rotate(matrix, glm::radians(ry), glm::vec3(0.0f, 1.0f, 0.0f) );
+	matrix = glm::rotate(matrix, glm::radians(rz), glm::vec3(0.0f, 0.0f, 1.0f) );
+	matrix = glm::scale(matrix, glm::vec3(scale, scale, scale) );
+	return matrix;
+}
+
+glm::mat4 Math::createViewMatrix(Camera* camera) {
+	glm::mat4 matrix = glm::mat4(1.0f);
+	matrix = glm::rotate(matrix, glm::radians(camera->getPitch()), glm::vec3(1.0f, 0.0f, 0.0f));
+	matrix = glm::rotate(matrix, glm::radians(camera->getYaw()), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 cameraPos = camera->getPos();
-	glm::vec3 negCameraPos = *(new glm::vec3(-cameraPos.x, -cameraPos.y, -cameraPos.z));
-	*matrix = glm::translate(*matrix, negCameraPos);
+	glm::vec3 negCameraPos = glm::vec3(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+	matrix = glm::translate(matrix, negCameraPos);
 	return matrix;
 }
 

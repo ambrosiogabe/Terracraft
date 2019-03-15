@@ -13,7 +13,7 @@ public:
 	EntityRenderer(StaticShader* shader, glm::mat4 projectionMatrix);
 	~EntityRenderer();
 
-	void render(std::map<TexturedModel*, std::vector<Entity*>*>* entities);
+	void render(std::map<TexturedModel*, std::vector<Entity>>* entities);
 
 private:
 	void prepareTexturedModel(TexturedModel* model);

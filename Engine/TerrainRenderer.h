@@ -13,7 +13,7 @@ public:
 	TerrainRenderer(TerrainShader* shader, glm::mat4 projectionMatrix);
 	~TerrainRenderer();
 
-	void render(std::vector<Terrain*>* terrains);
+	void render(std::vector<Terrain>* terrains);
 
 private:
 	TerrainShader* shader = nullptr;

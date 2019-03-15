@@ -71,7 +71,7 @@ int Loader::loadTexture(char* filename) {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	
+
 	// Uncomment if image doesn't look right
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -117,7 +117,7 @@ void Loader::storeDataInAttributeList(unsigned int attributeNumber, int coordina
 }
 
 // This guy takes care of the triangle indices data structure
-void Loader::bindIndicesBuffer(int* data,  int dataSize) {
+void Loader::bindIndicesBuffer(int* data, int dataSize) {
 	unsigned int vboID;
 	glGenBuffers(1, &vboID);
 	vbos.push_back(vboID);

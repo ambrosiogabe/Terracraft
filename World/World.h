@@ -28,7 +28,7 @@ private:
 
 	std::thread t1;
 	std::mutex lock_safety;
-	unsigned maxThreads = std::thread::hardware_concurrency() - 1;
+	unsigned maxThreads = std::thread::hardware_concurrency() - 2;
 	void init();
 	void waitForHelperThreads(std::vector<std::thread*>* helperThreads);
 	void generateChunks(int x, int z);

@@ -75,23 +75,23 @@ void DisplayManager::updateDisplay(GLFWwindow* display, std::vector<BlockTexture
 	}
 	glfwSwapInterval(1);
 
-	Loader* loader = new Loader();
+	Loader loader = Loader();
 
-	ModelTexture* terrainTextureAtlas = new ModelTexture(loader->loadTexture("res/texture_atlas.png"));
+	ModelTexture terrainTextureAtlas = ModelTexture(loader.loadTexture("res/texture_atlas.png"));
 
-	RawModel* rawPlayerModel = FileHandler::loadOBJ("res/bunny.obj", loader);
-	ModelTexture* playerTexture = new ModelTexture(loader->loadTexture("res/stallTexture.png"));
+	RawModel* rawPlayerModel = FileHandler::loadOBJ("res/bunny.obj", &loader);
+	ModelTexture* playerTexture = new ModelTexture(loader.loadTexture("res/stallTexture.png"));
 	TexturedModel* texturedPlayer = new TexturedModel(rawPlayerModel, playerTexture);
 	Player* player = new Player(texturedPlayer, *(new glm::vec3(0, 46, -30)), 0, 0, 0, 0.2);
 	player->setEyeLevel(0.5);
 
-	World* world = new World(player, blockTextures, loader, terrainTextureAtlas);
+	World* world = new World(player, blockTextures, &loader, &terrainTextureAtlas);
 
 	std::vector<GuiTexture*> guis = *(new std::vector<GuiTexture*>());
-	GuiTexture* gui = new GuiTexture(loader->loadTexture("res/socuwan.png"), *(new glm::vec2(-0.70f, 0.95f)), *(new glm::vec2(0.17f, 0.23f)));
+	GuiTexture* gui = new GuiTexture(loader.loadTexture("res/socuwan.png"), *(new glm::vec2(-0.70f, 0.95f)), *(new glm::vec2(0.17f, 0.23f)));
 	guis.push_back(gui);
 
-	GuiRenderer* guiRenderer = new GuiRenderer(loader);
+	GuiRenderer* guiRenderer = new GuiRenderer(&loader);
 	Camera* camera = new Camera(player);
 
 	Light* light = new Light(*(new glm::vec3(0.0, 1000.0, -7000.0)), *(new glm::vec3(0.4, 0.4, 0.4)));
@@ -135,7 +135,7 @@ void DisplayManager::updateDisplay(GLFWwindow* display, std::vector<BlockTexture
 
 	guiRenderer->cleanUp();
 	renderer->cleanUp();
-	loader->cleanUp();
+	loader.cleanUp();
 	world->cleanUp();
 }
 

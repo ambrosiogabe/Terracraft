@@ -27,8 +27,8 @@ void GuiRenderer::render(std::vector<GuiTexture*> guis) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, gui->getTexture());
 
-		glm::mat4* matrix = Math::createTransformationMatrix(gui->getPosition(), gui->getScale());
-		shader->loadTransformationMatrix(*matrix);
+		glm::mat4 matrix = Math::createTransformationMatrix(gui->getPosition(), gui->getScale());
+		shader->loadTransformationMatrix(matrix);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, quad->getVertexCount());
 	}

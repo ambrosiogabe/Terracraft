@@ -30,4 +30,3 @@ private:
 	std::vector<unsigned int> vbos;
 	std::vector<unsigned int> textures;
 };
-

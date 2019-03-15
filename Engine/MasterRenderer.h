@@ -36,8 +36,8 @@ private:
 	glm::mat4 projectionMatrix;
 
 
-	std::map<TexturedModel*, std::vector<Entity*>*>* entities = new std::map<TexturedModel*, std::vector<Entity*>*>();
-	std::vector<Terrain*>* terrains = new std::vector<Terrain*>();
+	std::map<TexturedModel*, std::vector<Entity>> entities;
+	std::vector<Terrain> terrains;
 	void createProjectionMatrix();
 };
 
